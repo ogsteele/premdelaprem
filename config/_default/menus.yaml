@@ -5,23 +5,74 @@
 
 main:
   - name: Home
+    identifier: home
     url: '#about'
-    weight: 10
+    weight: 1
+  - name: About
+    parent: home
+    url: '#about'
+    weight: 2
+  - name: League History
+    parent: home
+    url: '#history'
+    weight: 3
+  - name: Hall of Champions
+    parent: home
+    url: '#champions'
+    weight: 4
+  - name: Meet the League
+    parent: home
+    url: '#people'
+    weight: 4
+
+  - name: Rules
+    identifier: rules
+    weight: 5
+  - name: League Structure
+    parent: rules
+    url: 'rules/about'
+    weight: 2
+  - name: Conferences
+    parent: rules
+    url: '#about'
+    weight: 3
+  - name: Scoring
+    parent: rules
+    url: '#about'
+    weight: 3
+  - name: Squad Selection
+    parent: rules
+    url: '#about'
+    weight: 3
+
+  - name: Tables
+    identifier: tables
+    weight: 6
+  - name: Conference A
+    parent: tables
+    url: '#about'
+    weight: 2
+  - name: Conference B
+    parent: tables
+    url: '#about'
+    weight: 3
+  - name: Combined League Table
+    parent: tables
+    url: '#about'
+    weight: 3
+  - name: Historical Positions
+    parent: tables
+    url: '#about'
+    weight: 3
+
   - name: Posts
-    url: '#posts'
-    weight: 20
-  - name: Projects
-    url: '#projects'
-    weight: 30
-  - name: Talks
-    url: '#talks'
-    weight: 40
-  - name: Publications
-    url: '#featured'
-    weight: 50
-  - name: Contact
-    url: '#contact'
-    weight: 60
+    identifier: posts
+    weight: 7
+  - name: Blog
+    parent: posts
+    url: '#about'
+    weight: 2
+
 
 # Link to a PDF of your resume/CV from the menu.
 # To enable, copy your resume/CV to `static/uploads/resume.pdf` and uncomment the lines below.
