@@ -25,25 +25,37 @@ main:
     url: '#people'
     weight: 4
 
-  - name: Rules
+  - name: Admin
     identifier: rules
     weight: 5
   - name: League Structure
     parent: rules
-    url: 'rules/about'
+    url: 'rules/#league_structure'
     weight: 2
   - name: Conferences
     parent: rules
-    url: '#about'
+    url: 'rules/#conferences'
     weight: 3
   - name: Scoring
     parent: rules
+    url: 'rules/#scoring'
+    weight: 3
+
+  - name: Schedule
+    identifier: schedule
+    weight: 6
+  - name: A. Conference Matchups (R1-R15)
+    parent: schedule
+    url: '#about'
+    weight: 2
+  - name: B. Championship Playoffs (R16-R18)
+    parent: schedule
     url: '#about'
     weight: 3
-  - name: Squad Selection
-    parent: rules
+  - name: C. Sacko Bracket (R17-R18)
+    parent: schedule
     url: '#about'
-    weight: 3
+    weight: 4
 
   - name: Tables
     identifier: tables
