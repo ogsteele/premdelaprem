@@ -33,6 +33,7 @@ main:
     url: 'rules/#league_structure'
     weight: 2
   - name: Conferences
+    identifier: conferences
     parent: rules
     url: 'rules/#conferences'
     weight: 3
@@ -46,15 +47,15 @@ main:
     weight: 6
   - name: A. Conference Matchups (R1-R15)
     parent: schedule
-    url: '#about'
+    url: 'schedule/#conference_rounds'
     weight: 2
   - name: B. Championship Playoffs (R16-R18)
     parent: schedule
-    url: '#about'
+    url: 'schedule/#championships'
     weight: 3
   - name: C. Sacko Bracket (R17-R18)
     parent: schedule
-    url: '#about'
+    url: 'schedule/#sacko'
     weight: 4
 
   - name: Tables
