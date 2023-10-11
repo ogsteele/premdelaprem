@@ -76,7 +76,7 @@ main:
     weight: 7
   - name: Blog
     parent: posts
-    url: '#about'
+    url: 'blog/'
     weight: 2
 
 
