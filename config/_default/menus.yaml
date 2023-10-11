@@ -61,22 +61,15 @@ main:
   - name: Tables
     identifier: tables
     weight: 6
-  - name: Conference A
+  - name: League Table
     parent: tables
-    url: '#about'
+    url: 'tables/#leaguetable'
     weight: 2
-  - name: Conference B
-    parent: tables
-    url: '#about'
-    weight: 3
-  - name: Combined League Table
-    parent: tables
-    url: '#about'
-    weight: 3
   - name: Historical Positions
     parent: tables
-    url: '#about'
-    weight: 3
+    url: 'tables/#historicalpositions'
+    weight: 2
+
 
   - name: Posts
     identifier: posts

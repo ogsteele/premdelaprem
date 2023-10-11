@@ -134,4 +134,5 @@ sections:
       text: <br /> ![screen reader text](sacko.png "Sacko Bracket")
     design:
       columns: '2'
+      sections:
 ---
