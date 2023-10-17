@@ -13,13 +13,13 @@ status:
 superuser: false
 
 # Role/position/tagline
-role: Chief Pedantry Officer (CPO)
+role: Rebellious Goldfish
 
 # Highlight the author in author lists? (true/false)
 highlight_name: false
 
 user_groups:
-  - Board Members
+  - Coaches
 ---
 
 Unappologetically welsh. Despite not actually being welsh. Why do that to yourself?!

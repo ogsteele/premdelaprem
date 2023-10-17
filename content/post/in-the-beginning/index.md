@@ -1,5 +1,5 @@
 ---
-title: In the beginning ...
+title: In the beginning
 subtitle: Welcome 👋 Glad you managed to make it this far, this is the official announcement of our new webpage! 
 
 # Summary for listings and search engines

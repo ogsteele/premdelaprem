@@ -9,25 +9,29 @@ library(magrittr)
 The following code then imports the data from Gary, then calculate points difference and total points scored
 
 ```{r import}
-league_dat <- data.frame(read.csv('test_league.csv'))
+league_dat <- data.frame(read.csv('round1.csv'))
 # calculate points difference and total points
 league_dat$Pts.Diff <- league_dat$Points.Scored - league_dat$Points.Conceded
+league_dat$Bonus.Points <- league_dat$Bonus.Points..Losing. +
+                           league_dat$Bonus.Points..Try.
+league_dat <- select(league_dat, -6, -7)
 league_dat$Points <- league_dat$Wins*4 +
                      league_dat$Draws*2 + 
                      league_dat$Bonus.Points
 # create form variable
-form <- list(c(0.5),
-             c(0.5),
-             c(0.5),
-             c(0.5),
-             c(0.5),
-             c(0.5),
-             c(0.5),
-             c(0.5),
-             c(0.5),
-             c(0.5),
-             c(0.5),
-             c(0.5))
+form <- list(c(0),
+             c(1),
+             c(1),
+             c(0),
+             c(0),
+             c(1),
+             c(1),
+             c(1),
+             c(0),
+             c(0),
+             c(0),
+             c(1))
+
 league_dat$Form <- form
 # order the league table based on total number of points then 
 table <- league_dat %>%
