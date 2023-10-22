@@ -1,13 +1,13 @@
-Team,Conf,Wins,Draws,Losses,Bonus Points (Losing),Bonus Points (Try),Points Scored,Points Conceded
-Sam,Conference A,0,0,1,0,1,167,182.5
-Ben,Conference A,1,0,0,0,1,182.5,167
-Rhu,Conference A,1,0,0,0,0,168.5,130.5
-Cheese,Conference A,0,0,1,0,0,130.5,168.5
-Steggles,Conference A,0,0,1,0,0,137,161.5
-Jamie,Conference A,1,0,0,0,0,161.5,137
-Dan,Conference B,1,0,0,0,1,189,143
-Alex,Conference B,1,0,0,0,1,174,149.5
-Jack,Conference B,0,0,1,0,0,143,189
-Gary,Conference B,0,0,1,0,0,149.5,174
-Oli,Conference B,0,0,1,0,1,165,200.5
-Luke,Conference B,1,0,0,0,1,200.5,165
+ID,Player,Team Name,Conf,Wins,Draws,Losses,Bonus Points (Losing),Bonus Points (Try),Points Scored,Points Conceded
+1,Sam,Gilbert's Goons,Conference A,0,0,1,0,1,167,182.5
+2,Ben,Imperium of Man,Conference A,1,0,0,0,1,182.5,167
+3,Rhu,Rhu's Team,Conference A,1,0,0,0,0,168.5,130.5
+4,Cheese,Cheese's Team,Conference A,0,0,1,0,0,130.5,168.5
+5,Steggles,Steggles' Team,Conference A,0,0,1,0,0,137,161.5
+6,Jamie,Jamie's Team,Conference A,1,0,0,0,0,161.5,137
+7,Dan,Five Meter Cum,Conference B,1,0,0,0,1,189,143
+8,Alex,Rehabilitated Dogs,Conference B,1,0,0,0,1,174,149.5
+9,Jack,Jack's Team,Conference B,0,0,1,0,0,143,189
+10,Gary,Burger's Boks,Conference B,0,0,1,0,0,149.5,174
+11,Oli,Aboutasshit Tigers,Conference B,0,0,1,0,1,165,200.5
+12,Luke,Luke's Team,Conference B,1,0,0,0,1,200.5,165
