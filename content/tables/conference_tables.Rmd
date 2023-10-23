@@ -4,12 +4,13 @@ library(gtExtras)
 library(dplyr, warn.conflicts =  FALSE)
 library(ggplot2)
 library(magrittr)
+library(purrr)
 ```
 
 The following code then imports the data from Gary, then calculate points difference and total points scored
 
 ```{r import}
-league_dat <- data.frame(read.csv('round1.csv'))
+league_dat <- data.frame(read.csv('round2.csv'))
 # calculate points difference, total points and bonus points
 league_dat$Pts.Diff <- league_dat$Points.Scored - league_dat$Points.Conceded
 league_dat$Bonus.Points <- league_dat$Bonus.Points..Losing. +
@@ -24,18 +25,18 @@ league_dat$ConcededPlt <- league_dat$Points.Conceded
 league_dat$ScoredPlt <- league_dat$Points.Scored
 
 # create form variable and then add into the table
-form <- list(c(0), # Sam
-             c(1), # Ben
-             c(1), # Rhu
-             c(0), # Cheese
-             c(0), # Steggles
-             c(1), # Jamie
-             c(1), # Dan
-             c(1), # Alex
-             c(0), # Jack
-             c(0), # Gary
-             c(0), # Oli
-             c(1)  # Luke
+form <- list(c(0,1), # Sam
+             c(1,1), # Ben
+             c(1,0), # Rhu
+             c(0,0), # Cheese
+             c(0,1), # Steggles
+             c(1,0), # Jamie
+             c(1,0), # Dan
+             c(1,1), # Alex
+             c(0,0), # Jack
+             c(0,1), # Gary
+             c(0,1), # Oli
+             c(1,0)  # Luke
              )
 league_dat$Form <- form
 
@@ -74,7 +75,7 @@ table <- league_dat %>%
     gt() %>%
   # create win-loss plot in place of the form variable and move to after the loss collumn
   gt_plt_winloss(Form,
-                 palette = c("green",
+                 palette = c("blue",
                              "red",
                              "black")) %>%
   cols_move(
@@ -93,8 +94,8 @@ table <- league_dat %>%
   # plot the scored plot and move if necessary
   gt_plt_bar_pct(column = ScoredPlt, 
                     scaled = FALSE, 
-                    fill = "green", 
-                    background = "lightgreen") %>%
+                    fill = "blue", 
+                    background = "lightblue") %>%
   cols_move(
     columns = ScoredPlt,
     after = Points.Scored) %>%
@@ -156,7 +157,7 @@ table <- league_dat %>%
   # colour in the rows according to whether championship qualifier or not
   tab_style(
     style = list(
-      cell_fill(color = "red", alpha = 0.2),
+      cell_fill(color = "red", alpha = 0.1),
       cell_text(color = "black")
       ),
     locations = cells_body(rows = Rank > 4)) %>%
@@ -164,7 +165,7 @@ table <- league_dat %>%
   tab_style(
     style = list(
       cell_fill(color = "green", 
-                alpha = 0.2),
+                alpha = 0.1),
       cell_text(color = "black")),
     locations = cells_body(rows = Rank < 5)) %>%
   # add in footnotes
@@ -207,12 +208,11 @@ table <- league_dat %>%
   ) %>%
     cols_move(
       columns = PosChng,
-      after = Rank)
+      after = Rank) %>%
+    gtsave("tab_1.png", expand = 20)
     
 # call the table
 table
-
-# gtExtras::gt_plt_winloss(outcomes, max_wins = 16, type = "pill") %>%
 
 ```
 
