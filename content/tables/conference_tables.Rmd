@@ -10,7 +10,7 @@ library(purrr)
 The following code then imports the data from Gary, then calculate points difference and total points scored
 
 ```{r import}
-league_dat <- data.frame(read.csv('round2.csv'))
+league_dat <- data.frame(read.csv('round3.csv'))
 # calculate points difference, total points and bonus points
 league_dat$Pts.Diff <- league_dat$Points.Scored - league_dat$Points.Conceded
 league_dat$Bonus.Points <- league_dat$Bonus.Points..Losing. +
@@ -25,34 +25,34 @@ league_dat$ConcededPlt <- league_dat$Points.Conceded
 league_dat$ScoredPlt <- league_dat$Points.Scored
 
 # create form variable and then add into the table
-form <- list(c(0,1), # Sam
-             c(1,1), # Ben
-             c(1,0), # Rhu
-             c(0,0), # Cheese
-             c(0,1), # Steggles
-             c(1,0), # Jamie
-             c(1,0), # Dan
-             c(1,1), # Alex
-             c(0,0), # Jack
-             c(0,1), # Gary
-             c(0,1), # Oli
-             c(1,0)  # Luke
+form <- list(c(0,1,0), # Sam
+             c(1,1,1), # Ben
+             c(1,0,0), # Rhu
+             c(0,0,1), # Cheese
+             c(0,1,1), # Steggles
+             c(1,0,0), # Jamie
+             c(1,0,0), # Dan
+             c(1,1,0), # Alex
+             c(0,0,1), # Jack
+             c(0,1,0), # Gary
+             c(0,1,1), # Oli
+             c(1,0,1)  # Luke
              )
 league_dat$Form <- form
 
 # create previous position variable and then add into the table
-pastpos <- list(c(4), # Sam
+pastpos <- list(c(2), # Sam
              c(1), # Ben
-             c(2), # Rhu
+             c(3), # Rhu
              c(6), # Cheese
              c(5), # Steggles
-             c(3), # Jamie
-             c(1), # Dan
-             c(3), # Alex
+             c(4), # Jamie
+             c(2), # Dan
+             c(1), # Alex
              c(6), # Jack
              c(5), # Gary
-             c(4), # Oli
-             c(2)  # Luke
+             c(3), # Oli
+             c(4)  # Luke
              )
 league_dat$Previous.Position <- pastpos
 
