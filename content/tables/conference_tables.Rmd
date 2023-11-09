@@ -5,6 +5,12 @@ library(dplyr, warn.conflicts =  FALSE)
 library(ggplot2)
 library(magrittr)
 library(purrr)
+library(ggpubr)
+library(dplyr)
+library(tidyr)
+library(tidyverse)
+library(ggridges)
+library(ggrepel)
 ```
 
 The following code then imports the data from Gary, then calculate points difference and total points scored
@@ -216,3 +222,156 @@ table
 
 ```
 
+```{r pdtab}
+
+ggdotchart(league_dat, x = "Player", y = "Pts.Diff",
+           color = "Conf",                               # Color by groups
+           palette = c("#00AFBB", "#E7B800", "#FC4E07"), # Custom color palette
+           sorting = "descending",                       # Sort value in descending order
+           add = "segments",                             # Add segments from y = 0 to dots
+           add.params = list(color = "lightgray", size = 2), # Change segment color and size
+           group = "Pts.Diff",                                # Order by groups
+           dot.size = 8,                                 # Large dot size
+           label = round(league_dat$Pts.Diff,1),         # Add mpg values as dot labels
+           font.label = list(color = "white", size = 9, 
+                             vjust = 0.5),               # Adjust label parameters
+           ggtheme = theme_pubr()                        # ggplot2 theme
+           )+
+  geom_hline(yintercept = 0, linetype = 2, color = "lightgray") + 
+  labs(x = "Player") +
+  labs(y = "Points Difference") + 
+  labs(color = "Conference") + rotate_x_text(45) +
+  theme(axis.title=element_text(face="bold"))
+
+ggsave("DifferenceTab.png")
+```
+
+```{r scores}
+wklyScored <- data.frame(read.csv('WeeklyPoints.csv'))
+
+wklyScored[wklyScored == 0] <- NA
+
+pal <- colorRampPalette(c("red","green"))
+
+ridgeline <- wklyScored %>%
+    pivot_longer(!Team, names_to = "Round", values_to = "Scored") %>% 
+    na.omit() %>%
+    ggplot(., aes(x = Scored, 
+                  y = fct_reorder(Team, 
+                                  Scored, 
+                                  .fun = sum),
+                  fill = Team)) +
+  geom_density_ridges() + 
+    theme_classic() + theme(legend.position = "none") +
+    labs(x = "Points Scored") +
+    labs(y = " ") + scale_fill_manual(values = alpha(pal(12), .95)) +
+  theme(axis.title=element_text(face="bold"))
+
+ggsave("ScoringDensity.png")
+```
+```{r cumulativepoints}
+
+# prepare data
+dat <- wklyScored %>%
+    pivot_longer(!Team, 
+                 names_to = "Round", 
+                 values_to = "Scored") %>% 
+    group_by(Team) %>%
+    mutate(cv=cumsum(Scored)) %>%
+    mutate(r = 1:15)
+
+ggplot(dat, 
+       aes(x = r, 
+           y = cv, 
+           colour = Team,
+           group = Team)) + 
+  geom_line(size = 0.5, alpha = 0.8)+
+  geom_point(size = 1, alpha = 0.8) + theme_classic() + 
+  labs(y = "Cumulative Points Scored") +
+  labs(x = "Round #") + 
+  scale_x_continuous(breaks = 1:15) +
+  ylim(0,(max(na.omit(dat$cv)))*1.2) +
+  theme(axis.text=element_text(size=12),
+        axis.title=element_text(size=14,face="bold"))
+
+ggsave("CumulativeScoring.png")
+```
+
+```{r quadrant}
+ggplot(league_dat, 
+       aes(x = Points.Scored, y = Points.Conceded)) +
+  geom_hline(yintercept=mean(league_dat$Points.Conceded),
+             linetype="dashed", color = "black") +
+  geom_vline(xintercept=mean(league_dat$Points.Scored),
+             linetype="dashed", color = "black") +
+  annotate("text", 
+           x = mean(league_dat$Points.Scored)-25, 
+           y = mean(league_dat$Points.Conceded)-25, 
+           label = ("Missed Chances"), 
+           fontface = 2, alpha = 0.5) +
+  annotate("text", 
+           x = mean(league_dat$Points.Scored)-25, 
+           y = mean(league_dat$Points.Conceded)+35, 
+           label = ("Deserved Defeats"), 
+           fontface = 2, alpha = 0.5) +
+  annotate("text", 
+           x = mean(league_dat$Points.Scored)+25, 
+           y = mean(league_dat$Points.Conceded)+35, 
+           label = ("Tough Matchups"), 
+           fontface = 2, alpha = 0.5) +
+  annotate("text", 
+           x = mean(league_dat$Points.Scored)+25, 
+           y = mean(league_dat$Points.Conceded)-25, 
+           label = ("Deserved Wins"), 
+           fontface = 2, alpha = 0.5) +
+  geom_point(color = "blue", size = 3) +
+  geom_label_repel(aes(label = Player),
+                  box.padding   = 0.35, 
+                  point.padding = 0.5,
+                  segment.color = 'grey50') +
+  theme_classic() + 
+  labs(x = "Average Points Scored") +
+  labs(y = "Average Points Conceded") +
+  theme(axis.title=element_text(face="bold"))
+
+ggsave("QuadrantPlot.png")
+```
+```{r historicalpos}
+histpos <- data.frame(read.csv('roundhistory.csv'))
+histpos[histpos == 0] <- NA
+
+# prepare the data
+dat <- histpos %>%
+    pivot_longer(!Team, 
+                 names_to = "Round", 
+                 values_to = "Points") %>% 
+    group_by(Team) %>%
+    mutate(r = 1:15) %>%
+    na.omit()
+
+ggplot(dat,
+       aes(x = r,
+           y = Points,
+           group = Team)) + 
+  geom_line(aes(color = Team), 
+            size = 2,
+            alpha = 0.6) +
+  geom_point(data = dat[dat$r == max(dat$r),],
+             aes(x = r, y = Points, 
+                 color = Team),
+             size = 3) +
+  scale_x_continuous(breaks = 1:15) + theme_classic() + 
+  geom_label_repel(
+    data = dat %>% 
+      group_by(Team) %>% 
+      filter(r == max(r)), 
+    aes(r, Points, fill = Team, label = Team),
+    color = "black",
+    fill = "white") + theme(legend.position = "none") + 
+  labs(x = "Round #") +
+  theme(axis.title=element_text(face="bold"))
+
+ggsave("HistoricalPositions.png")
+
+
+```

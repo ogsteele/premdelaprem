@@ -65,9 +65,9 @@ main:
     parent: tables
     url: 'tables/#leaguetable'
     weight: 2
-  - name: Historical Positions
+  - name: Data Charts
     parent: tables
-    url: 'tables/#historicalpositions'
+    url: 'tables/#datacharts'
     weight: 2
 
 
