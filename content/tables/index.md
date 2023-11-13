@@ -8,7 +8,7 @@ sections:
     content:
       title: League Table
       subtitle: Conferences A & B
-      text: League Table below will be updated weekly following confirmation of points from Superbru. Green denotes qualification positions for the Championship Playoffs and red denotes qualification places for the Sacko Bracket <br />  <br />  ![screen reader text](Week_4.png "League Table as of 06.11.23")
+      text: League Table below will be updated weekly following confirmation of points from Superbru. Green denotes qualification positions for the Championship Playoffs and red denotes qualification places for the Sacko Bracket <br />  <br />  ![screen reader text](leaguetable.png "League Table as of when i last updated it (usually monday night)")
     design:
       # See Page Builder docs for all section customization options.
       # Choose how many columns the section has. Valid values: '1' or '2'.

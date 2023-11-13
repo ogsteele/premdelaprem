@@ -16,7 +16,7 @@ library(ggrepel)
 The following code then imports the data from Gary, then calculate points difference and total points scored
 
 ```{r import}
-league_dat <- data.frame(read.csv('round4.csv'))
+league_dat <- data.frame(read.csv('round5.csv'))
 # calculate points difference, total points and bonus points
 league_dat$Pts.Diff <- league_dat$Points.Scored - league_dat$Points.Conceded
 league_dat$Bonus.Points <- league_dat$Bonus.Points..Losing. +
@@ -31,34 +31,34 @@ league_dat$ConcededPlt <- league_dat$Points.Conceded
 league_dat$ScoredPlt <- league_dat$Points.Scored
 
 # create form variable and then add into the table
-form <- list(c(0,1,0,1), # Sam
-             c(1,1,1,1), # Ben
-             c(1,0,0,1), # Rhu
-             c(0,0,1,0), # Cheese
-             c(0,1,1,0), # Steggles
-             c(1,0,0,0), # Jamie
-             c(1,0,0,1), # Dan
-             c(1,1,0,1), # Alex
-             c(0,0,1,1), # Jack
-             c(0,1,0,0), # Gary
-             c(0,1,1,0), # Oli
-             c(1,0,1,0)  # Luke
+form <- list(c(0,1,0,1,1), # Sam
+             c(1,1,1,1,1), # Ben
+             c(1,0,0,1,1), # Rhu
+             c(0,0,1,0,0), # Cheese
+             c(0,1,1,0,0), # Steggles
+             c(1,0,0,0,0), # Jamie
+             c(1,0,0,1,0), # Dan
+             c(1,1,0,1,1), # Alex
+             c(0,0,1,1,1), # Jack
+             c(0,1,0,0,1), # Gary
+             c(0,1,1,0,0), # Oli
+             c(1,0,1,0,0)  # Luke
              )
 league_dat$Form <- form
 
 # create previous position variable and then add into the table
-pastpos <- list(c(3), # Sam
+pastpos <- list(c(2), # Sam
              c(1), # Ben
-             c(4), # Rhu
+             c(3), # Rhu
              c(5), # Cheese
-             c(2), # Steggles
+             c(4), # Steggles
              c(6), # Jamie
-             c(4), # Dan
+             c(2), # Dan
              c(1), # Alex
-             c(6), # Jack
-             c(5), # Gary
-             c(2), # Oli
-             c(3)  # Luke
+             c(5), # Jack
+             c(6), # Gary
+             c(3), # Oli
+             c(4)  # Luke
              )
 league_dat$Previous.Position <- pastpos
 
@@ -215,7 +215,7 @@ table <- league_dat %>%
     cols_move(
       columns = PosChng,
       after = Rank) %>%
-    gtsave("tab_1.png", expand = 20)
+    gtsave("leaguetable.png", expand = 20)
     
 # call the table
 table
@@ -305,22 +305,22 @@ ggplot(league_dat,
   geom_vline(xintercept=mean(league_dat$Points.Scored),
              linetype="dashed", color = "black") +
   annotate("text", 
-           x = mean(league_dat$Points.Scored)-25, 
+           x = mean(league_dat$Points.Scored)-35, 
            y = mean(league_dat$Points.Conceded)-25, 
            label = ("Missed Chances"), 
            fontface = 2, alpha = 0.5) +
   annotate("text", 
-           x = mean(league_dat$Points.Scored)-25, 
+           x = mean(league_dat$Points.Scored)-35, 
            y = mean(league_dat$Points.Conceded)+35, 
            label = ("Deserved Defeats"), 
            fontface = 2, alpha = 0.5) +
   annotate("text", 
-           x = mean(league_dat$Points.Scored)+25, 
+           x = mean(league_dat$Points.Scored)+35, 
            y = mean(league_dat$Points.Conceded)+35, 
            label = ("Tough Matchups"), 
            fontface = 2, alpha = 0.5) +
   annotate("text", 
-           x = mean(league_dat$Points.Scored)+25, 
+           x = mean(league_dat$Points.Scored)+35, 
            y = mean(league_dat$Points.Conceded)-25, 
            label = ("Deserved Wins"), 
            fontface = 2, alpha = 0.5) +
