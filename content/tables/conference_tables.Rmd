@@ -15,8 +15,8 @@ library(ggrepel)
 
 The following code then imports the data from Gary, then calculate points difference and total points scored
 
-```{r import}
-league_dat <- data.frame(read.csv('round5.csv'))
+```{r conferencetables}
+league_dat <- data.frame(read.csv('round6.csv'))
 # calculate points difference, total points and bonus points
 league_dat$Pts.Diff <- league_dat$Points.Scored - league_dat$Points.Conceded
 league_dat$Bonus.Points <- league_dat$Bonus.Points..Losing. +
@@ -31,18 +31,18 @@ league_dat$ConcededPlt <- league_dat$Points.Conceded
 league_dat$ScoredPlt <- league_dat$Points.Scored
 
 # create form variable and then add into the table
-form <- list(c(0,1,0,1,1), # Sam
-             c(1,1,1,1,1), # Ben
-             c(1,0,0,1,1), # Rhu
-             c(0,0,1,0,0), # Cheese
-             c(0,1,1,0,0), # Steggles
-             c(1,0,0,0,0), # Jamie
-             c(1,0,0,1,0), # Dan
-             c(1,1,0,1,1), # Alex
-             c(0,0,1,1,1), # Jack
-             c(0,1,0,0,1), # Gary
-             c(0,1,1,0,0), # Oli
-             c(1,0,1,0,0)  # Luke
+form <- list(c(0,1,0,1,1,0), # Sam
+             c(1,1,1,1,1,1), # Ben
+             c(1,0,0,1,1,1), # Rhu
+             c(0,0,1,0,0,0), # Cheese
+             c(0,1,1,0,0,1), # Steggles
+             c(1,0,0,0,0,0), # Jamie
+             c(1,0,0,1,0,1), # Dan
+             c(1,1,0,1,1,1), # Alex
+             c(0,0,1,1,1,0), # Jack
+             c(0,1,0,0,1,0), # Gary
+             c(0,1,1,0,0,0), # Oli
+             c(1,0,1,0,0,1)  # Luke
              )
 league_dat$Form <- form
 
@@ -53,12 +53,12 @@ pastpos <- list(c(2), # Sam
              c(5), # Cheese
              c(4), # Steggles
              c(6), # Jamie
-             c(2), # Dan
+             c(3), # Dan
              c(1), # Alex
-             c(5), # Jack
-             c(6), # Gary
-             c(3), # Oli
-             c(4)  # Luke
+             c(2), # Jack
+             c(4), # Gary
+             c(5), # Oli
+             c(6)  # Luke
              )
 league_dat$Previous.Position <- pastpos
 
@@ -231,7 +231,7 @@ ggdotchart(league_dat, x = "Player", y = "Pts.Diff",
            add = "segments",                             # Add segments from y = 0 to dots
            add.params = list(color = "lightgray", size = 2), # Change segment color and size
            group = "Pts.Diff",                                # Order by groups
-           dot.size = 8,                                 # Large dot size
+           dot.size = 10,                                 # Large dot size
            label = round(league_dat$Pts.Diff,1),         # Add mpg values as dot labels
            font.label = list(color = "white", size = 9, 
                              vjust = 0.5),               # Adjust label parameters
@@ -374,4 +374,225 @@ ggplot(dat,
 ggsave("HistoricalPositions.png")
 
 
+```
+
+
+```{r combinedtable}
+league_dat <- data.frame(read.csv('round5.csv'))
+# calculate points difference, total points and bonus points
+league_dat$Pts.Diff <- league_dat$Points.Scored - league_dat$Points.Conceded
+league_dat$Bonus.Points <- league_dat$Bonus.Points..Losing. +
+                           league_dat$Bonus.Points..Try.
+league_dat <- select(league_dat, -Bonus.Points..Losing., 
+                                 -Bonus.Points..Try.) # remove excess
+league_dat$Points <- league_dat$Wins*4 +
+                     league_dat$Draws*2 + 
+                     league_dat$Bonus.Points
+# create extra collumns for data plots
+league_dat$ConcededPlt <- league_dat$Points.Conceded
+league_dat$ScoredPlt <- league_dat$Points.Scored
+
+# create form variable and then add into the table
+form <- list(c(0,1,0,1,1), # Sam
+             c(1,1,1,1,1), # Ben
+             c(1,0,0,1,1), # Rhu
+             c(0,0,1,0,0), # Cheese
+             c(0,1,1,0,0), # Steggles
+             c(1,0,0,0,0), # Jamie
+             c(1,0,0,1,0), # Dan
+             c(1,1,0,1,1), # Alex
+             c(0,0,1,1,1), # Jack
+             c(0,1,0,0,1), # Gary
+             c(0,1,1,0,0), # Oli
+             c(1,0,1,0,0)  # Luke
+             )
+league_dat$Form <- form
+
+# create previous position variable and then add into the table
+pastpos <- list(c(2), # Sam
+             c(1), # Ben
+             c(3), # Rhu
+             c(5), # Cheese
+             c(4), # Steggles
+             c(6), # Jamie
+             c(2), # Dan
+             c(1), # Alex
+             c(5), # Jack
+             c(6), # Gary
+             c(3), # Oli
+             c(4)  # Luke
+             )
+league_dat$Previous.Position <- pastpos
+
+# create the gt table by passing the DF into it
+ctable <- league_dat %>%
+  # decide on the ranking order of priority
+  arrange( -league_dat$Points, 
+           -league_dat$Pts.Diff,
+           league_dat$Team.Name) %>%
+  # add in the rank collumn
+  mutate(Rank = 1:n())
+
+  ctable$PosChng <- as.numeric(unlist(ctable$Previous.Position)) - ctable$Rank
+  
+  ctable <- select(ctable, -Previous.Position) %>%
+  # create as gt
+    gt() %>%
+  # create win-loss plot in place of the form variable and move to after the loss collumn
+  gt_plt_winloss(Form,
+                 palette = c("blue",
+                             "red",
+                             "black")) %>%
+  cols_move(
+    columns = Form,
+    after = Losses) %>%
+  # add divider after form
+  gt_add_divider(columns = Form, 
+                 color = "grey", 
+                 style = "solid") %>%
+  # plot the difference plot and move if necessary
+  gt_plt_bar(column = Pts.Diff, 
+             keep_column = FALSE, 
+             width = 35,
+             color = "darkgrey",
+             scale_type = "number") %>%
+  # plot the scored plot and move if necessary
+  gt_plt_bar_pct(column = ScoredPlt, 
+                    scaled = FALSE, 
+                    fill = "blue", 
+                    background = "lightblue") %>%
+  cols_move(
+    columns = ScoredPlt,
+    after = Points.Scored) %>%
+  # plot the scored plot and move if necessary
+  gt_plt_bar_pct(column = ConcededPlt, 
+                    scaled = FALSE, 
+                    fill = "red", 
+                    background = "pink") %>%
+  cols_move(
+    columns = ConcededPlt,
+    after = Points.Conceded) %>%
+  # swap plot and number for the points sections
+  cols_move(
+    columns = Points.Conceded,
+    after = ConcededPlt) %>%
+  cols_move(
+    columns = Points.Scored,
+    after = ScoredPlt) %>%
+  gt_add_divider(columns = Pts.Diff, 
+                 color = "grey", 
+                 style = "solid") %>%
+  # move rank and team to the very start and divide from rest
+  cols_move_to_start(columns = c(Rank, 
+                                 Team.Name)) %>%
+  # add divider after team
+  gt_add_divider(columns = Conf, 
+                 color = "grey", 
+                 style = "solid") %>%
+  # add in ID column and then swap ID to picture
+  cols_move(
+    columns = ID,
+    after = Rank) %>%
+  fmt_image(
+    columns = ID,
+    path = "./imgs/",
+    file_pattern = "avatar_{x}.png") %>%
+  # label collumns appropriately
+  cols_label(
+    ID = md(" "),
+    Player = md("**PLAYER**"),
+    Team.Name = md("**TEAM**"),
+    Conf = md("**CONFERENCE**"),
+    Wins = md("**W**"),
+    Draws = md("**D**"),
+    Losses = md("**L**"),
+    Bonus.Points = md("**BP**"),
+    ScoredPlt = md("**SCORED**"),
+    ConcededPlt = md("**CONCEDED**"),
+    Points = md("**PTS**"),
+    Rank = md("**RANK**"),
+    Form = md("**FORM**"),
+    Pts.Diff = md("**DIFFERENCE**"),
+    Points.Scored = md(" "),
+    Points.Conceded = md(" "),
+    PosChng = md("**CHANGE**")
+  ) %>%
+  # colour in the rows according to whether championship qualifier or not
+  tab_style(
+    style = list(
+      cell_fill(color = "red", alpha = 0.1),
+      cell_text(color = "black")
+      ),
+    locations = cells_body(rows = Rank > 8)) %>%
+  # as
+  tab_style(
+    style = list(
+      cell_fill(color = "green", 
+                alpha = 0.1),
+      cell_text(color = "black")),
+    locations = cells_body(rows = Rank < 9)) %>%
+  # add in footnotes
+  tab_footnote(
+    footnote = "1 win = 4 points",
+    locations = cells_column_labels(columns = Wins)) %>%
+  tab_footnote(
+    footnote = "1 draw = 2 points",
+    locations = cells_column_labels(columns = Draws)) %>%
+  tab_footnote(
+    footnote = "1 bonus point for scoring 4 or more tries and/or losing within 7 points",
+    locations = cells_column_labels(columns = Bonus.Points)) %>%
+  tab_footnote(
+    footnote = "Positions based on points scored, points difference, scored and then conceded in that order",
+    locations = cells_column_labels(columns = Rank)) %>%
+  # housekeeping
+  cols_align(align = ("left"),
+             columns = everything()) %>%
+  gt_merge_stack(col1 = Team.Name, 
+                 col2 = Player) %>%
+    text_transform(
+    locations = cells_body(columns = vars(PosChng)),
+    fn = function(x){
+      
+      PosChng <- as.integer(x)
+      
+      choose_logo <-function(x){
+        if (x == 0){
+        gt::html(fontawesome::fa("equals", fill = "grey"))
+      } else if (x > 0){
+         gt::html(glue::glue("<span style='color:#028AOF;font-face:bold;font-size:14px;'>{x}</span>"), fontawesome::fa("arrow-up", fill = "#1134A6"))
+      } else if (x < 0) {
+        gt::html(glue::glue("<span style='color:#DA2A2A;font-face:bold;font-size:14px;'>{x}</span>"), fontawesome::fa("arrow-down", fill = "#DA2A2A"))
+      }
+      } 
+      
+      map(PosChng, choose_logo)
+    
+    }
+  ) %>%
+    cols_move(
+      columns = PosChng,
+      after = Rank) %>%
+    gtsave_extra(., "combitab.png", path = NULL, ..., zoom = 2, expand = 5)
+    #gtsave("combinedtable.png")
+    
+# call the table
+ctable
+```
+```{r records}
+# muck about with form
+for (x in 1:12) {
+a <- data.frame( # convert resultant output to a dataframe called a
+  unclass( # remove the class
+    rle( # look for consecutive sequences
+      unlist(form[x]) # remove list classing from the form variable
+      )
+    )
+  ) 
+
+win_streak[x] <- a[a$values == "1", ] %>%
+  max(.$lengths)
+
+loss_streak[x] <- a[a$values == "0", ] %>%
+  max(.$lengths)
+}
 ```
