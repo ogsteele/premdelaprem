@@ -34,6 +34,16 @@ sections:
       # Choose how many columns the section has. Valid values: '1' or '2'.
       columns: '2'
   - block: markdown
+    id: weeklypoints
+    content:
+      title: Average Score
+      subtitle: What does each player score on average, and how does this compare to the league average?
+      text: Confidence plots of mean weekly points scored. Large circle denotes the mean number of points scored each week over the season, whilst the bars extending from each circle are bootstrapped confidence intervals (ie, the true value should lie somewhere between those two bars). The slightly fainter smaller circles are the two most recent performances for each player (ie, if both are above their respective larger circle then the player is in better form than their average. Similarly, if both smaller circles are below their average the player is in poor form). The slightly larger of the two is then the most recent performance. The dotted horizontal black line simply donates the league average. Confidence intervals, as plotted here, allow us to say with some confidence that the average is significantly different to other values if the confidence intervals don't overlap. At time of writing, Ben's confidence intervals were the only that didn't overlap the average line suggesting he is significantly above average. <br />  <br />  ![screen reader text](averagePoints.png "Average Points Figure")
+    design:
+      # See Page Builder docs for all section customization options.
+      # Choose how many columns the section has. Valid values: '1' or '2'.
+      columns: '2'
+  - block: markdown
     id: differences
     content:
       title: Points Difference
@@ -73,5 +83,24 @@ sections:
       # See Page Builder docs for all section customization options.
       # Choose how many columns the section has. Valid values: '1' or '2'.
       columns: '2'
-
+  - block: markdown
+    id: avetries
+    content:
+      title: Average Tries
+      subtitle: How many tries do teams score on average and how does this compare to the league average?
+      text: Box and whisker plot with overlaid individual points <br />  <br />  ![screen reader text](averageTries.png "Average Tries")
+    design:
+      # See Page Builder docs for all section customization options.
+      # Choose how many columns the section has. Valid values: '1' or '2'.
+      columns: '2'
+  - block: markdown
+    id: cumtries
+    content:
+      title: Cumulative Tries
+      subtitle: How have tries scored changed over the course of the season?
+      text: Simple trailing dot plot illustrating how the cumulative number of tries has changed for each player over the course of the season <br />  <br />  ![screen reader text](WeeklyTries.png "Cumulative Tries")
+    design:
+      # See Page Builder docs for all section customization options.
+      # Choose how many columns the section has. Valid values: '1' or '2'.
+      columns: '2'
 ---
